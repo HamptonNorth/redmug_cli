@@ -1,0 +1,7 @@
+{
+  "path": "./test44",
+  "password": "wwwwwww",
+  "type": "js",
+  "tools": ["prettier", "eslint"],
+  "install": true
+}

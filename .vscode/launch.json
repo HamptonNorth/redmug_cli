@@ -1,0 +1,25 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Launch Program",
+            "program": "${workspaceFolder}/app.js",
+            "request": "launch",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "type": "node"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "11ty + Tailwind CLI Debug", // Give it a descriptive name
+            "skipFiles": [
+                "<node_internals>/**" // Optional: Skip internal Node.js files when debugging
+            ],
+            "program": "${workspaceFolder}/index.js", // Path to your CLI script
+            "args": [], // Command-line arguments for your script (if any) - add these here if you want to test with specific arguments
+            "console": "integratedTerminal" // or "externalTerminal", "internalConsole"
+        }
+    ]
+}
