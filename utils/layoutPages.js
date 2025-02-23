@@ -2,14 +2,14 @@
 // base.njk and blogLayout.njk
 //
 //
-//  TO DO test with other template engines
+//  TO DO
 //
 import fs from 'fs'
 import path from 'path'
 
-export async function buildLayoutPages(rootPath, templateEngine) {
-  // base.
-  let t = `<!DOCTYPE html>
+export async function buildLayoutPages(rootPath, templateEngine, css) {
+  let t =
+    `<!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="UTF-8"/>
@@ -20,8 +20,12 @@ export async function buildLayoutPages(rootPath, templateEngine) {
         <link
         href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
             rel="stylesheet"> 
-        <link rel="stylesheet" href="/assets/css/output.css">
-        <title>{{ site.name }}
+         <link rel="stylesheet" href="/assets/css/output.css">
+       ` +
+    css +
+    `
+
+        <title>Redmug
             {% if title %}
                 - {{ title }}
             {% endif %}
@@ -44,7 +48,7 @@ export async function buildLayoutPages(rootPath, templateEngine) {
         </main>
         {% include "partials/_footer.liquid" %}`
   }
-  // Add code for any addition template engines here
+
   t += `  
     </body>
 </html>
