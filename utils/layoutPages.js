@@ -7,7 +7,7 @@
 import fs from 'fs'
 import path from 'path'
 
-export async function buildLayoutPages(rootPath, templateEngine, css) {
+export async function buildLayoutPages(rootPath, templateEngine, css, title = 'My site') {
   let t =
     `<!DOCTYPE html>
 <html lang="en">
@@ -24,8 +24,11 @@ export async function buildLayoutPages(rootPath, templateEngine, css) {
        ` +
     css +
     `
+    <link rel="stylesheet" href="/assets/css/style.css">
 
-        <title>Redmug
+        <title>` +
+    title +
+    `
             {% if title %}
                 - {{ title }}
             {% endif %}

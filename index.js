@@ -18,6 +18,7 @@ import { buildLayoutPages } from './utils/layoutPages.js'
 import { buildPartialsPages } from './utils/includesPartials.js'
 import { buildPostPages } from './utils/postPages.js'
 import { minifiedCSS } from './utils/getMinifiedCSS.js'
+import { buildLocalCSS } from './utils/createLocalCSS.js'
 
 const version = '0.1.1'
 
@@ -73,6 +74,12 @@ async function main() {
 
   const installRecipe = await group(
     {
+      siteTitle: () =>
+        text({
+          message: 'Site title?',
+          placeholder: 'My site'
+        }),
+
       install: () =>
         confirm({
           message: 'Install 11ty?',
@@ -209,13 +216,15 @@ async function main() {
       await createDirectories(absolutePath)
       const template = installRecipe.TemplateEngine
       const css = installRecipe.CSS
+      const title = installRecipe.siteTitle
       //  Build and write files
       await buildEleventyConfig(installRecipe, 'My Title', 'subTitle', path.join(absolutePath, '.eleventy.js'))
       await buildHomePage(absolutePath)
-      await buildLayoutPages(absolutePath, template, getStylesheet)
+      await buildLayoutPages(absolutePath, template, getStylesheet, title)
       await buildPartialsPages(absolutePath, template)
       await buildAboutPage(absolutePath, installRecipe)
       await buildPostPages(absolutePath, template)
+      await buildLocalCSS(absolutePath, css)
     }
   } catch (error) {
     s.stop('installation failed')
