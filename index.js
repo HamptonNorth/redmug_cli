@@ -17,9 +17,9 @@ import { buildAboutPage } from './utils/aboutPage.js'
 import { buildLayoutPages } from './utils/layoutPages.js'
 import { buildPartialsPages } from './utils/includesPartials.js'
 import { buildBlogPages } from './utils/blogPages.js'
+import { minifiedCSS } from './utils/getMinifiedCSS.js'
 
-let targetDirExists = false
-let targetDirEmpty = false
+const version = '0.1.1'
 
 main()
 
@@ -30,7 +30,7 @@ async function main() {
   console.log('')
 
   intro(color.bgWhite(color.black(' +++ create an 11ty static web site +++ ')))
-  log.info('CLI version 0.10')
+  log.info('CLI version: ' + version)
 
   const project = await group(
     {
@@ -124,6 +124,7 @@ async function main() {
     }
   )
   let installRecipeOption = []
+  let getStylesheet = await minifiedCSS(installRecipe.CSS)
   if (installRecipe.CSS === 'tw') {
     installRecipeOption = await group(
       {
@@ -146,6 +147,8 @@ async function main() {
     installRecipe['tw_typography'] = installRecipeOption.tw_typography
   }
 
+  installRecipe['version'] = version
+
   if (!installRecipe.install) {
     log.error('Operation cancelled. Response to insall 11ty = no! Use ctrl+C for immediate cancel')
     process.exit(0)
@@ -158,9 +161,8 @@ async function main() {
   const s = spinner()
   // s.start('Installing 11ty and ' + installRecipe.CSS + ' This may take some time .....')
   s.start('Installing. This may take some time ........')
-  await setTimeout(1000)
+  await setTimeout(500)
   try {
-    await setTimeout(1000)
     // Initialize npm
     execSync(`npm init -y`, { cwd: absolutePath, stdio: 'pipe' })
     await setTimeout(1000)
@@ -217,12 +219,13 @@ async function main() {
       ]
       await createDirectories(absolutePath, dirsNeeded)
       const template = installRecipe.TemplateEngine
+      const css = installRecipe.CSS
       //  Build and write files
       await buildEleventyConfig(installRecipe, 'My Title', 'subTitle', path.join(absolutePath, '.eleventy.js'))
       await buildHomePage(absolutePath)
-      await buildLayoutPages(absolutePath, template)
+      await buildLayoutPages(absolutePath, template, getStylesheet)
       await buildPartialsPages(absolutePath, template)
-      await buildAboutPage(absolutePath)
+      await buildAboutPage(absolutePath, installRecipe)
       await buildBlogPages(absolutePath, template)
     }
   } catch (error) {
