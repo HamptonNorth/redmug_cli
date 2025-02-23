@@ -50,15 +50,17 @@ export async function buildPartialsPages(rootPath, templateEngine) {
         <a href="{{ nextPost.url }}">{{ nextPost.data.title }}</a>
     {% endif %}`
   } else if (templateEngine === 'liquid') {
-    t = `{% assign previousPost = page.previous %}
-{% assign nextPost = page.next %}
+    t = `{% assign previousPost = collections.post | getPreviousCollectionItem: page %}
+{% assign nextPost = collections.post | getNextCollectionItem: page %}
 
 {% if previousPost %}
-  Previous: <a href="{{ previousPost.url }}">{{ previousPost.data.title }}</a>
+  Previous:
+  <a href="{{ previousPost.url }}">{{ previousPost.data.title }}</a>
 {% endif %}
 <br>
 {% if nextPost %}
-  Next: <a href="{{ nextPost.url }}">{{ nextPost.data.title }}</a>
+  Next:
+  <a href="{{ nextPost.url }}">{{ nextPost.data.title }}</a>
 {% endif %}`
   }
   await writePage(t, rootPath, '_paginate', templateEngine)
