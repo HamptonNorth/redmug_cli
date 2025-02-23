@@ -1,5 +1,5 @@
 // builds  _layout files
-// base.njk and blogLayout.njk
+// base.njk and postLayout.njk
 //
 //
 //  TO DO
@@ -55,14 +55,14 @@ export async function buildLayoutPages(rootPath, templateEngine, css) {
   `
   await writePage(t, rootPath, 'base', templateEngine)
 
-  //   blogLayout.
+  //   postsLayout.
   t = `---
  layout: base
 ---
 
 <div class="text-red-400">
 `
-  if (templateEngine == -'njk') {
+  if (templateEngine === 'njk') {
     t += `{{ content| safe }} <br/> {% include "partials/_paginate.njk" %}
     `
   } else if (templateEngine === 'liquid') {
@@ -72,9 +72,9 @@ export async function buildLayoutPages(rootPath, templateEngine, css) {
   t += `
 </div>
 <hr class="text-blue-500">
-    <a href="/blog">Blog Home</a>`
+    <a href="/posts"Posts Home</a>`
 
-  await writePage(t, rootPath, 'blogLayout', templateEngine)
+  await writePage(t, rootPath, 'postLayout', templateEngine)
 }
 
 async function writePage(content, rootPath, name, extension) {

@@ -32,7 +32,7 @@ async function writePage(type, content, rootPath, name, extension, number = 0) {
     } catch (err) {
       console.error('Error writing file:', err)
     }
-  } else if (type === 'blog') {
+  } else if (type === 'post') {
     let file = name + number + '.' + extension
     fullPath = path.join(rootPath, 'src', file)
   }

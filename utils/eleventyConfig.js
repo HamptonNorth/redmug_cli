@@ -73,9 +73,9 @@ export async function buildEleventyConfig(recipe, title = 'title', subtitle = 's
       return date
     })
 
-  eleventyConfig.addCollection("blog", function(collection) {
-    return collection.getFilteredByGlob("./src/blog/*.md").sort(function(a, b) {
-      return a.date - b.date; // Sort by date (adjust as needed)
+  eleventyConfig.addCollection("posts", function(collection) {
+    return collection.getFilteredByGlob("./src/posts/*.md").sort(function(a, b) {
+      return a.date - b.date; // Sort by date 
     });
   });
 

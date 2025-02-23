@@ -18,7 +18,7 @@ permalink: /about/
 
 I've always been angry about many things. Simple irritations like dog's fouling the footpath to
 big issues like wealth inequality or religion in schools. I wanted a vehicle to write about
-these things in a more structured way. Hence this simple blog.
+these things in a more structured way. Hence this simple site.
 
 ## Tech stuff
 

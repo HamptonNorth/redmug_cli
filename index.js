@@ -16,7 +16,7 @@ import { buildHomePage } from './utils/homePage.js'
 import { buildAboutPage } from './utils/aboutPage.js'
 import { buildLayoutPages } from './utils/layoutPages.js'
 import { buildPartialsPages } from './utils/includesPartials.js'
-import { buildBlogPages } from './utils/blogPages.js'
+import { buildPostPages } from './utils/postPages.js'
 import { minifiedCSS } from './utils/getMinifiedCSS.js'
 
 const version = '0.1.1'
@@ -205,19 +205,8 @@ async function main() {
       fs.writeFileSync(packageJSONPath, updatedPackageJsonString, 'utf8')
 
       await setTimeout(1000)
-      let dirsNeeded = [
-        'src',
-        'src/assets',
-        'src/assets/images',
-        'src/assets/css',
-        'src/_data',
-        'src/_dist',
-        'src/_includes',
-        'src/_includes/partials',
-        'src/_layouts',
-        'src/blog'
-      ]
-      await createDirectories(absolutePath, dirsNeeded)
+
+      await createDirectories(absolutePath)
       const template = installRecipe.TemplateEngine
       const css = installRecipe.CSS
       //  Build and write files
@@ -226,7 +215,7 @@ async function main() {
       await buildLayoutPages(absolutePath, template, getStylesheet)
       await buildPartialsPages(absolutePath, template)
       await buildAboutPage(absolutePath, installRecipe)
-      await buildBlogPages(absolutePath, template)
+      await buildPostPages(absolutePath, template)
     }
   } catch (error) {
     s.stop('installation failed')
