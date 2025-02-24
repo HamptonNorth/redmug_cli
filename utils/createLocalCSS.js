@@ -7,17 +7,22 @@ import path from 'path'
 
 export async function buildLocalCSS(rootPath, css) {
   let t = `
+  body {
+    
+  }
   main, footer{    
     font-family:  "Inter", sans-serif;    
     margin-left: 30px;  
     margin-right: 30px;  
     max-width: 800px;
-}
+    }
 
 nav {  
     max-width: 800px;
     display: flex;
     justify-content: right; /* content right within the nav */ 
+    margin-left: 30px;  
+    margin-right: 30px;  
     padding: 10px;
   }
   
@@ -26,19 +31,28 @@ nav {
     align-items: center; /* Centers content vertically within the nav */
   }
   
-
   nav a {
     display: flex; /* required for horizontal list */  
-  }
-  
-  nav a  {
     padding: 0 20px; /*adds spacing between list items*/
   }
-
+  
   footer{
-    font-size: 75%;
-    
+    font-size: 60%;    
   }
+
+  .subhead{
+    color: grey;
+    font-size: 70%;
+  }
+  
+  /* Uncomment out following - aids for debug */
+  /* 
+  body{background-color: honeydew;}
+  nav{background-color: yellow;}
+  main{background-color: bisque;}
+  footer{background-color:aliceblue;} 
+  * { outline: 1px dashed red;}
+  */
   
   `
   await writePage(t, rootPath)

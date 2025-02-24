@@ -60,10 +60,10 @@ export async function buildLayoutPages(rootPath, templateEngine, css, title = 'M
 
   //   postsLayout.
   t = `---
- layout: base
+layout: base
 ---
 
-<div class="text-red-400">
+<div class="">
 `
   if (templateEngine === 'njk') {
     t += `{{ content| safe }} <br/> {% include "partials/_paginate.njk" %}
@@ -74,7 +74,7 @@ export async function buildLayoutPages(rootPath, templateEngine, css, title = 'M
   }
   t += `
 </div>
-<hr class="text-blue-500">
+<hr class="">
     <a href="/posts"Posts Home</a>`
 
   await writePage(t, rootPath, 'postLayout', templateEngine)
@@ -84,7 +84,6 @@ async function writePage(content, rootPath, name, extension) {
   let fullPath = ''
   let file = name + '.' + extension
   fullPath = path.join(rootPath, 'src', '_layouts', file)
-  // console.log('🚀 ~ index4.js:280 ~ writePage ~ fullPath:', fullPath)
   try {
     fs.writeFileSync(fullPath, content, { encoding: 'utf8' }) // Specify UTF-8 encoding
     //   console.log('File written successfully!')

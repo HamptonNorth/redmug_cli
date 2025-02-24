@@ -6,37 +6,41 @@ import path from 'path'
 
 export async function buildHomePage(rootPath) {
   let t = `---
-  layout: base
-  title: Home
-  tags: page
----
-  
-  <img class="" src="/assets/images/logo.png" alt="your logo" width="50" height="50">
-  
-  {%headers "Home", "Learning 11ty"%}
-  
-  A site built with 11ty
+layout: base
+title: Home
+tags: page
+---  
+<img class="" src="/assets/images/logo.png" alt="your logo" width="50" height="50">
+
+{%headers "Home", "Learning 11ty"%}
+
+This site has been built with the Eleventy static site generator. For all the Eleventy docs follow this [link](https://www.11ty.dev/docs/). The redmug cli usage and options are explained in the <code>README.md</code> file in the home directory of the node script.
+
+The CSS choice sets up the stylesheet link in the head section to be downloaded from a CDN. This is a *minified* file where there is the option. If you are happy with your choice of CSS library, you are probably best installing locally for performance reasons.
+
+Tailwind installation uses an input CSS direcory and an output CSS directory with the NPM package run-all and Tailwind CLI providing the magic.
+
+All the posts are authored in <code>markdown</code> and are in the <code>/posts</code> directory.
   `
-  await writePage('home', t, rootPath, 'index', 'md')
+  await writePage(t, rootPath, 'index', 'md')
+  await copyLogo(rootPath)
+}
+async function writePage(content, rootPath, name, extension) {
+  let fullPath = ''
+
+  let file = name + '.' + extension
+  fullPath = path.join(rootPath, 'src', file)
+
+  try {
+    fs.writeFileSync(fullPath, content, { encoding: 'utf8' }) // Specify UTF-8 encoding
+    //   console.log('File written successfully!')
+  } catch (err) {
+    console.error('Error writing Home Page file:', err)
+  }
 }
 
-async function writePage(type, content, rootPath, name, extension, number = 0) {
-  let fullPath = ''
-  if (type === 'home') {
-    let file = name + '.' + extension
-    fullPath = path.join(rootPath, 'src', file)
-    // console.log('🚀 ~ index4.js:280 ~ writePage ~ fullPath:', fullPath)
-    try {
-      fs.writeFileSync(fullPath, content, { encoding: 'utf8' }) // Specify UTF-8 encoding
-      //   console.log('File written successfully!')
-    } catch (err) {
-      console.error('Error writing file:', err)
-    }
-  } else if (type === 'post') {
-    let file = name + number + '.' + extension
-    fullPath = path.join(rootPath, 'src', file)
-  }
-  // copy sample log
+async function copyLogo(rootPath) {
+  // copy sample logo
   const sourcePath = path.join(process.cwd(), 'assets', 'logo.png')
   const destinationPath = path.join(rootPath, 'src', 'assets', 'images', 'logo.png')
   try {

@@ -19,6 +19,7 @@ import { buildPartialsPages } from './utils/includesPartials.js'
 import { buildPostPages } from './utils/postPages.js'
 import { minifiedCSS } from './utils/getMinifiedCSS.js'
 import { buildLocalCSS } from './utils/createLocalCSS.js'
+import { build404Page } from './utils/404Page.js'
 
 const version = '0.1.1'
 
@@ -218,11 +219,17 @@ async function main() {
       const css = installRecipe.CSS
       const title = installRecipe.siteTitle
       //  Build and write files
-      await buildEleventyConfig(installRecipe, 'My Title', 'subTitle', path.join(absolutePath, '.eleventy.js'))
+      await buildEleventyConfig(
+        installRecipe,
+        'An eleventy site',
+        'Scaffolded using redmug-cli',
+        path.join(absolutePath, '.eleventy.js')
+      )
       await buildHomePage(absolutePath)
       await buildLayoutPages(absolutePath, template, getStylesheet, title)
       await buildPartialsPages(absolutePath, template)
       await buildAboutPage(absolutePath, installRecipe)
+      await build404Page(absolutePath, getStylesheet)
       await buildPostPages(absolutePath, template)
       await buildLocalCSS(absolutePath, css)
     }
