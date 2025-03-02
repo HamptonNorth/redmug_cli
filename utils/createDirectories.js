@@ -6,7 +6,7 @@
 import fs from 'fs'
 import path from 'path'
 
-export async function createDirectories(root) {
+export async function createDirectories(root, css) {
   const dirs = [
     'src',
     'src/assets',
@@ -19,6 +19,9 @@ export async function createDirectories(root) {
     'src/_layouts',
     'src/posts'
   ]
+  if (css === 'tw') {
+  }
+
   for (const dir of dirs) {
     const fullPath = path.join(root, dir)
 

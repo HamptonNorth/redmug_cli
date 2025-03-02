@@ -35,6 +35,11 @@ export async function buildEleventyConfig(recipe, title = 'title', subtitle = 's
     plugins += `
     eleventyConfig.addPlugin(plugin_navigation) `
   }
+  if (recipe.Plugins.includes('syntaxhighlight')) {
+    imports += "import plugin_syntaxHighlight from '@11ty/eleventy-plugin-syntaxhighlight' \n"
+    plugins += `
+    eleventyConfig.addPlugin(plugin_syntaxHighlight) `
+  }
   if (recipe.Plugins.includes('is-land')) {
     imports += "import plugin_is_land from '@11ty/is-land' \n"
     plugins += `

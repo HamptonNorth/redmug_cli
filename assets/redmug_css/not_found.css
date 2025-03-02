@@ -1,0 +1,20 @@
+/**
+ * Based on eleventy-duo theme authored by Yinka Adedire
+ * Very elegant and well organised CSS 
+ * https://github.com/yinkakun/eleventy-duo
+ * Thank you - 
+*/
+
+.not-found {
+    display: grid;
+    place-items: center;
+  }
+  
+  .not-found h1 {
+    font-size: var(--text-6xl);
+  }
+  
+  .not-found p {
+    font-size: var(--text-3xl);
+    text-align: center;
+  }

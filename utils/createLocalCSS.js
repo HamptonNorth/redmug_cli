@@ -6,56 +6,16 @@ import fs from 'fs'
 import path from 'path'
 
 export async function buildLocalCSS(rootPath, css) {
-  let t = `
-  body {
-    
+  if (css === 'tw') {
+    // tailwind
+    await copyCSS(rootPath, 'tailwind_css')
+  } else if (css === 'redmug') {
+    // custom redmug.css
+    await copyCSS(rootPath, 'redmug_css')
+  } else {
+    // libraries loaded from cdn
+    await copyCSS(rootPath, 'cdn_base_css')
   }
-  main, footer{    
-    font-family:  "Inter", sans-serif;    
-    margin-left: 30px;  
-    margin-right: 30px;  
-    max-width: 800px;
-    }
-
-nav {  
-    max-width: 800px;
-    display: flex;
-    justify-content: right; /* content right within the nav */ 
-    margin-left: 30px;  
-    margin-right: 30px;  
-    padding: 10px;
-  }
-  
-  nav {
-   font-size:smaller;
-    align-items: center; /* Centers content vertically within the nav */
-  }
-  
-  nav a {
-    display: flex; /* required for horizontal list */  
-    padding: 0 20px; /*adds spacing between list items*/
-  }
-  
-  footer{
-    font-size: 60%;    
-  }
-
-  .subhead{
-    color: grey;
-    font-size: 70%;
-  }
-  
-  /* Uncomment out following - aids for debug */
-  /* 
-  body{background-color: honeydew;}
-  nav{background-color: yellow;}
-  main{background-color: bisque;}
-  footer{background-color:aliceblue;} 
-  * { outline: 1px dashed red;}
-  */
-  
-  `
-  await writePage(t, rootPath)
 }
 
 async function writePage(content, rootPath) {
@@ -69,5 +29,39 @@ async function writePage(content, rootPath) {
     //   console.log('File written successfully!')
   } catch (err) {
     console.error('Error writing local CSS file:', err)
+  }
+}
+
+async function copyCSS(rootPath, css_dir) {
+  // copy sample logo
+  const sourceDirectory = path.join(process.cwd(), 'assets', css_dir)
+  const destinationDirectory = path.join(rootPath, 'src', 'assets', 'css')
+  try {
+    if (!fs.existsSync(sourceDirectory)) {
+      throw new Error(`CSS source directory not found: ${sourceDirectory}`)
+    }
+
+    // Ensure the destination directory exists, create it if not
+    if (!fs.existsSync(destinationDirectory)) {
+      throw new Error(`CSS destination directory not found: ${destinationDirectory}`)
+    }
+
+    // Read all files in the source directory
+    const files = fs.readdirSync(sourceDirectory)
+
+    // Copy each file to the destination directory
+    files.forEach(file => {
+      const sourcePath = path.join(sourceDirectory, file)
+      const destinationPath = path.join(destinationDirectory, file)
+
+      // Check if it's a file (not a directory) before copying
+      if (fs.statSync(sourcePath).isFile()) {
+        fs.copyFileSync(sourcePath, destinationPath)
+      }
+    })
+
+    console.log(`Successfully copied CSS files from ${sourceDirectory} to ${destinationDirectory}`)
+  } catch (error) {
+    console.error(`Error copying CSS files: ${error.message}`)
   }
 }

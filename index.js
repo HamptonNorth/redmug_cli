@@ -20,6 +20,8 @@ import { buildPostPages } from './utils/postPages.js'
 import { minifiedCSS } from './utils/getMinifiedCSS.js'
 import { buildLocalCSS } from './utils/createLocalCSS.js'
 import { build404Page } from './utils/404Page.js'
+import { buildTailwindCSS } from './utils/tailwindInputCSS.js'
+import { buildTailwindConfig } from './utils/createTailwindConfig.js'
 
 const version = '0.1.1'
 
@@ -78,7 +80,7 @@ async function main() {
       siteTitle: () =>
         text({
           message: 'Site title?',
-          placeholder: 'My site'
+          placeholder: 'Redmug'
         }),
 
       install: () =>
@@ -99,20 +101,22 @@ async function main() {
       Plugins: () =>
         multiselect({
           message: 'Select official 11ty plugins to install.',
-          initialValues: [],
+          initialValues: ['img', 'rss', 'syntaxhighlight'],
           required: false,
           options: [
             { value: 'img', label: 'Image' },
             { value: 'fetch', label: 'Fetch' },
             { value: 'rss', label: 'RSS' },
             { value: 'navigation', label: 'Navigation' },
+            { value: 'syntaxhighlight', label: 'Syntax highlighting' },
+
             { value: 'is-land', label: '<is-land>' }
           ]
         }),
       CSS: () =>
         select({
           message: 'Select a CSS library for your project.',
-          initialValue: 'tw',
+          initialValue: 'redmug',
           options: [
             { value: 'none', label: 'no CSS to be installed' },
             { value: 'tw', label: 'Tailwind' },
@@ -120,7 +124,8 @@ async function main() {
             { value: 'mvp', label: 'MVP CSS' },
             { value: 'simple', label: 'Simple CSS' },
             { value: 'pure', label: 'Pure CSS' },
-            { value: 'picnic', label: 'Picnic CSS' }
+            { value: 'picnic', label: 'Picnic CSS' },
+            { value: 'redmug', label: 'Custom CSS' }
           ]
         })
     },
@@ -158,7 +163,7 @@ async function main() {
   installRecipe['version'] = version
 
   if (!installRecipe.install) {
-    log.error('Operation cancelled. Response to insall 11ty = no! Use ctrl+C for immediate cancel')
+    log.error('Operation cancelled. Response to install 11ty = no! Use ctrl+C for immediate cancel')
     process.exit(0)
   }
 
@@ -196,8 +201,23 @@ async function main() {
         execSync(`npm i @11ty/eleventy-navigation  --save-dev`, { cwd: absolutePath, stdio: 'pipe' })
       }
       await setTimeout(500)
+      if (installRecipe.Plugins.includes('syntaxhighlight')) {
+        execSync(`npm i  @11ty/eleventy-plugin-syntaxhighlight --save-dev`, { cwd: absolutePath, stdio: 'pipe' })
+      }
+      await setTimeout(500)
       if (installRecipe.Plugins.includes('is-land')) {
         execSync(`npm i @11ty/is-land  --save-dev`, { cwd: absolutePath, stdio: 'pipe' })
+      }
+      await setTimeout(500)
+      if (installRecipe.CSS === 'tw') {
+        // install Tailwind, tailwind-cli, typography and postcss
+        execSync(`npm install tailwindcss @tailwindcss/cli`, { cwd: absolutePath, stdio: 'pipe' })
+        await setTimeout(500)
+        execSync(`npm install -D @tailwindcss/typography`, { cwd: absolutePath, stdio: 'pipe' })
+        await setTimeout(500)
+        execSync(`npm install -D @tailwindcss/postcss`, { cwd: absolutePath, stdio: 'pipe' })
+        await setTimeout(500)
+        execSync(`npm install npm-run-all --save-dev`, { cwd: absolutePath, stdio: 'pipe' })
       }
 
       // fix package.json
@@ -207,18 +227,34 @@ async function main() {
       if (packageJson.type === 'commonjs') {
         packageJson.type = 'module'
       }
-      packageJson.version = '0.1.0'
+      packageJson.version = version
+      let script = ''
+      if (installRecipe.CSS === 'tw') {
+        let x = 1
+        packageJson.scripts = {
+          start: 'npm-run-all -p dev:*',
+          build: 'run-s build:*',
+          'dev:11ty': 'eleventy --serve',
+          'dev:css':
+            'tailwindcss -i ./src/assets/css/tailwind-input.css -o ./dist/assets/css/tailwind-output.css --watch',
+          'build:11ty': 'eleventy',
+          'build:css': 'tailwindcss -i ./src/assets/css/tailwind-input.css -o ./dist/assets/css/tailwind-output.css'
+        }
+      } else {
+        packageJson.scripts = { start: 'eleventy --serve', build: 'eleventy' }
+      }
 
       const updatedPackageJsonString = JSON.stringify(packageJson, null, 2)
       fs.writeFileSync(packageJSONPath, updatedPackageJsonString, 'utf8')
 
       await setTimeout(1000)
 
-      await createDirectories(absolutePath)
       const template = installRecipe.TemplateEngine
       const css = installRecipe.CSS
       const title = installRecipe.siteTitle
+
       //  Build and write files
+      await createDirectories(absolutePath, css)
       await buildEleventyConfig(
         installRecipe,
         'An eleventy site',
@@ -232,6 +268,8 @@ async function main() {
       await build404Page(absolutePath, getStylesheet)
       await buildPostPages(absolutePath, template)
       await buildLocalCSS(absolutePath, css)
+      await buildTailwindCSS(absolutePath)
+      await buildTailwindConfig(absolutePath)
     }
   } catch (error) {
     s.stop('installation failed')
@@ -239,7 +277,7 @@ async function main() {
   }
 
   s.stop('Installation complete')
-  const nextSteps = `cd ${project.dir}          \nnpx eleventy --serve         `
+  const nextSteps = `cd ${project.dir}          \nnpm start (for dev)         \nnpm build (for deployment)    `
 
   note(nextSteps, 'Next steps. ')
   outro(`*** finished ***`)

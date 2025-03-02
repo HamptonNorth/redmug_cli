@@ -20,12 +20,10 @@ export async function buildLayoutPages(rootPath, templateEngine, css, title = 'M
         <link
         href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
             rel="stylesheet"> 
-         <link rel="stylesheet" href="/assets/css/output.css">
        ` +
     css +
     `
-    <link rel="stylesheet" href="/assets/css/style.css">
-
+        <link rel="stylesheet" href="/assets/css/main.css">
         <title>` +
     title +
     `
@@ -37,22 +35,24 @@ export async function buildLayoutPages(rootPath, templateEngine, css, title = 'M
             name="description"
             content=" {% if description %} {{ description }} {% else %} {{ site.description }} {% endif %} "/>
     </head>
-    <body>`
+    <body>
+   `
   if (templateEngine === 'njk') {
     t += ` {% include "partials/_navigation.njk" %}
-        <main>
+        <main class="markdown">
             {{ content | safe }}
         </main>
         {% include "partials/_footer.njk" %}`
   } else if (templateEngine === 'liquid') {
     t += ` {% include "partials/_navigation.liquid" %}
-        <main>
+        <main class="markdown">
             {{ content }}
         </main>
         {% include "partials/_footer.liquid" %}`
   }
 
-  t += `  
+  t += ` 
+   
     </body>
 </html>
   `
@@ -63,7 +63,7 @@ export async function buildLayoutPages(rootPath, templateEngine, css, title = 'M
 layout: base
 ---
 
-<div class="">
+<div class="markdown text-red-500">
 `
   if (templateEngine === 'njk') {
     t += `{{ content| safe }} <br/> {% include "partials/_paginate.njk" %}
@@ -75,7 +75,7 @@ layout: base
   t += `
 </div>
 <hr class="">
-    <a href="/posts"Posts Home</a>`
+    <a class="markdown" href="/posts"Posts Home</a>`
 
   await writePage(t, rootPath, 'postLayout', templateEngine)
 }

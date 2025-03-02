@@ -1,12 +1,12 @@
 // returns stylesheet link to load a minified CSS librarary from CDN
 // e.g. <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css" />
 //
-// If Tailwind selected, set up not done here
-// minified should be set to true or false
+// If Tailwind selected or custom redmug.css, set up not done here
+// minified option used where offered
 
 export async function minifiedCSS(css) {
   if (css === 'none' || css === 'tw') {
-    return
+    return ''
   } else if (css === 'pico') {
     return '<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css" />'
   } else if (css === 'mvp') {

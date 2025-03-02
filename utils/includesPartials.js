@@ -16,14 +16,14 @@ export async function buildPartialsPages(rootPath, templateEngine) {
   if (templateEngine === 'njk') {
     t = `<nav>
 {%- for item in collections.page -%}
-        <a href="{{ item.url }}">{{ item.data.title }}</a>
+        <a class="markdown" href="{{ item.url }}">{{ item.data.title }}</a>
 {%- endfor -%}
 </nav>
   `
   } else if (templateEngine === 'liquid') {
     t = `<nav>
 {% for item in collections.page %}
-        <a href="{{ item.url }}">{{ item.data.title }}</a>
+        <a class="markdown" href="{{ item.url }}">{{ item.data.title }}</a>
 {% endfor %}
 </nav>
   `
@@ -33,7 +33,7 @@ export async function buildPartialsPages(rootPath, templateEngine) {
 
   //   footer.
   t = `<footer class="">
-    <p class="footer-content">Eleventy Site &copy; 2025</p>
+    <p class="footer-content markdown">Eleventy Site &copy; 2025</p>
 </footer>`
 
   await writePage(t, rootPath, '_footer', templateEngine)
@@ -43,11 +43,11 @@ export async function buildPartialsPages(rootPath, templateEngine) {
     t = `{% set previousPost = collections.post | getPreviousCollectionItem(page) %}
 {% set nextPost = collections.post | getNextCollectionItem(page) %}
 {% if previousPost %}Previous:
-    <a href="{{ previousPost.url }}">{{ previousPost.data.title }}</a>
+    <a class="markdown" href="{{ previousPost.url }}">{{ previousPost.data.title }}</a>
 {% endif %}
 <br>
     {% if nextPost %}Next:
-        <a href="{{ nextPost.url }}">{{ nextPost.data.title }}</a>
+        <a class="markdown" href="{{ nextPost.url }}">{{ nextPost.data.title }}</a>
     {% endif %}`
   } else if (templateEngine === 'liquid') {
     t = `{% assign previousPost = collections.post | getPreviousCollectionItem: page %}
@@ -55,12 +55,12 @@ export async function buildPartialsPages(rootPath, templateEngine) {
 
 {% if previousPost %}
   Previous:
-  <a href="{{ previousPost.url }}">{{ previousPost.data.title }}</a>
+  <a class="markdown" href="{{ previousPost.url }}">{{ previousPost.data.title }}</a>
 {% endif %}
 <br>
 {% if nextPost %}
   Next:
-  <a href="{{ nextPost.url }}">{{ nextPost.data.title }}</a>
+  <a class="markdown" href="{{ nextPost.url }}">{{ nextPost.data.title }}</a>
 {% endif %}`
   }
   await writePage(t, rootPath, '_paginate', templateEngine)
