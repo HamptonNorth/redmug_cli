@@ -32,47 +32,7 @@ tags: page
 </ul>`
 
   await writePage(postsHome, rootPath, 'post', templateEngine)
-
-  const t1 = `---
-title: First Post
-layout: postLayout
-tags: post
-date: 2024-12-19
----
-
-# First Post
-
-Dynamically repurpose excellent internal or "organic" sources through interdependent e-tailers. Completely exploit virtual data rather than technically sound data. Proactively incentivize flexible internal or "organic" sources with.`
-
-  await writePost(t1, rootPath, 'post1', 'md')
-
-  const t2 = `---
-title: Second Post
-layout: postLayout
-tags: post
----
-
-# Second Post
-
-Compellingly leverage existing installed base ideas whereas cost effective results. Interactively provide access to economically sound resources before quality.
-
-Seamlessly predominate transparent initiatives for world-class methods of empowerment. Phosfluorescently network prospective niches after clicks-and-mortar vortals. Energistically harness multidisciplinary.`
-
-  await writePost(t2, rootPath, 'post2', 'md')
-
-  const t3 = `---
-title: Third Post
-layout: postLayout
-tags: post
----
-
-  # Third Post
-
-  Assertively expedite integrated infrastructures whereas inexpensive quality vectors. Globally transition global e-business through sustainable potentialities. Objectively drive team driven.
-
-  Dynamically repurpose excellent internal or "organic" sources through interdependent e-tailers. Completely exploit virtual data rather than technically sound data. Proactively incentivize flexible internal or "organic" sources with.`
-
-  await writePost(t3, rootPath, 'post3', 'md')
+  await copySamplePosts(rootPath)
 }
 
 async function writePage(content, rootPath, name, extension) {
@@ -89,17 +49,36 @@ async function writePage(content, rootPath, name, extension) {
   }
 }
 
-async function writePost(content, rootPath, name, extension) {
-  // write posts/post at /src/posts
-  let fullPath = ''
-
-  let file = name + '.' + extension
-  fullPath = path.join(rootPath, 'src', 'posts', file)
-
+async function copySamplePosts(rootPath) {
+  // copy sample posts
+  const sourceDirectory = path.join(process.cwd(), 'sample_pages', 'posts')
+  const destinationDirectory = path.join(rootPath, 'src', 'posts')
   try {
-    fs.writeFileSync(fullPath, content, { encoding: 'utf8' }) // Specify UTF-8 encoding
-    // console.log('File written successfully!')
-  } catch (err) {
-    console.error('Error writing post file:', err)
+    if (!fs.existsSync(sourceDirectory)) {
+      throw new Error(`Sample posts source directory not found: ${sourceDirectory}`)
+    }
+
+    // Ensure the destination directory exists, create it if not
+    if (!fs.existsSync(destinationDirectory)) {
+      throw new Error(`Posts destination directory not found: ${destinationDirectory}`)
+    }
+
+    // Read all files in the source directory
+    const files = fs.readdirSync(sourceDirectory)
+
+    // Copy each file to the destination directory
+    files.forEach(file => {
+      const sourcePath = path.join(sourceDirectory, file)
+      const destinationPath = path.join(destinationDirectory, file)
+
+      // Check if it's a file (not a directory) before copying
+      if (fs.statSync(sourcePath).isFile()) {
+        fs.copyFileSync(sourcePath, destinationPath)
+      }
+    })
+
+    console.log(`Successfully copied sample post files from ${sourceDirectory} to ${destinationDirectory}`)
+  } catch (error) {
+    console.error(`Error copying posts files: ${error.message}`)
   }
 }
