@@ -51,7 +51,7 @@ async function writePage(content, rootPath, name, extension) {
 
 async function copySamplePosts(rootPath) {
   // copy sample posts
-  const sourceDirectory = path.join(process.cwd(), 'sample_pages', 'posts')
+  const sourceDirectory = path.join(process.cwd(), 'source_pages', 'posts')
   const destinationDirectory = path.join(rootPath, 'src', 'posts')
   try {
     if (!fs.existsSync(sourceDirectory)) {

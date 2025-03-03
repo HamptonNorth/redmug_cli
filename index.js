@@ -262,7 +262,7 @@ async function main() {
         path.join(absolutePath, '.eleventy.js')
       )
       await buildHomePage(absolutePath)
-      await buildLayoutPages(absolutePath, template, getStylesheet, title)
+      await buildLayoutPages(absolutePath, template, title)
       await buildPartialsPages(absolutePath, template)
       await buildAboutPage(absolutePath, installRecipe)
       await build404Page(absolutePath, getStylesheet)

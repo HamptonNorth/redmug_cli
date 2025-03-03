@@ -1,0 +1,6 @@
+{% if title %}
+    - {{ title }}
+{% endif %}</title><meta
+    name="description"
+    content=" {% if description %} {{ description }} {% else %} {{ site.description }} {% endif %} "/></head><body>{% include "partials/_navigation.njk" %}<main class="markdown">
+{{ content | safe }}</main>{% include "partials/_footer.njk" %}</body></html>

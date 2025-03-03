@@ -18,20 +18,6 @@ export async function buildLocalCSS(rootPath, css) {
   }
 }
 
-async function writePage(content, rootPath) {
-  let fullPath = ''
-
-  let file = 'style.css'
-  fullPath = path.join(rootPath, 'src', 'assets', 'css', file)
-
-  try {
-    fs.writeFileSync(fullPath, content, { encoding: 'utf8' }) // Specify UTF-8 encoding
-    //   console.log('File written successfully!')
-  } catch (err) {
-    console.error('Error writing local CSS file:', err)
-  }
-}
-
 async function copyCSS(rootPath, css_dir) {
   // copy sample logo
   const sourceDirectory = path.join(process.cwd(), 'assets', css_dir)

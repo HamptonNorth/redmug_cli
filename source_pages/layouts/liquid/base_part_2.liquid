@@ -1,0 +1,16 @@
+            {% if title %}
+                - {{ title }}
+            {% endif %}
+        </title>
+        <meta
+            name="description"
+            content=" {% if description %} {{ description }} {% else %} {{ site.description }} {% endif %} "/>
+    </head>
+    <body>
+    {% include "partials/_navigation.liquid" %}
+        <main class="markdown">
+            {{ content }}
+        </main>
+        {% include "partials/_footer.liquid" %}   
+    </body>
+</html>

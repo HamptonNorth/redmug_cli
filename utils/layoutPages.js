@@ -4,90 +4,25 @@
 //
 //  TO DO
 //
-import fs from 'fs'
+
 import path from 'path'
+import { readSnippet } from './readSnippet'
+import { writePage } from './writeSamplePage'
 
-export async function buildLayoutPages(rootPath, templateEngine, css, title = 'My site') {
-  let t =
-    `<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8"/>
-        <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link
-        href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
-            rel="stylesheet"> 
-       ` +
-    css +
-    `
-        <link rel="stylesheet" href="/assets/css/main.css">
-        <title>` +
-    title +
-    `
-            {% if title %}
-                - {{ title }}
-            {% endif %}
-        </title>
-        <meta
-            name="description"
-            content=" {% if description %} {{ description }} {% else %} {{ site.description }} {% endif %} "/>
-    </head>
-    <body>
-   `
-  if (templateEngine === 'njk') {
-    t += ` {% include "partials/_navigation.njk" %}
-        <main class="markdown">
-            {{ content | safe }}
-        </main>
-        {% include "partials/_footer.njk" %}`
-  } else if (templateEngine === 'liquid') {
-    t += ` {% include "partials/_navigation.liquid" %}
-        <main class="markdown">
-            {{ content }}
-        </main>
-        {% include "partials/_footer.liquid" %}`
-  }
+export async function buildLayoutPages(rootPath, templateEngine, title = 'My site') {
+  // base
+  let content = readSnippet(
+    path.join((process.cwd(), 'source_pages', 'layouts', templateEngine, 'base_part_1.' + templateEngine))
+  )
+  content += title
+  content += readSnippet(
+    path.join((process.cwd(), 'source_pages', 'layouts', templateEngine, 'base_part_1.' + templateEngine))
+  )
+  await writePage('layouts', content, rootPath, 'base.' + templateEngine)
 
-  t += ` 
-   
-    </body>
-</html>
-  `
-  await writePage(t, rootPath, 'base', templateEngine)
-
-  //   postsLayout.
-  t = `---
-layout: base
----
-
-<div class="markdown text-red-500">
-`
-  if (templateEngine === 'njk') {
-    t += `{{ content| safe }} <br/> {% include "partials/_paginate.njk" %}
-    `
-  } else if (templateEngine === 'liquid') {
-    t += `{{ content }} <br/> {% include "partials/_paginate.liquid" %}
-    `
-  }
-  t += `
-</div>
-<hr class="">
-    <a class="markdown" href="/posts"Posts Home</a>`
-
-  await writePage(t, rootPath, 'postLayout', templateEngine)
-}
-
-async function writePage(content, rootPath, name, extension) {
-  let fullPath = ''
-  let file = name + '.' + extension
-  fullPath = path.join(rootPath, 'src', '_layouts', file)
-  try {
-    fs.writeFileSync(fullPath, content, { encoding: 'utf8' }) // Specify UTF-8 encoding
-    //   console.log('File written successfully!')
-  } catch (err) {
-    console.error('Error writing layout file:', err)
-  }
+  // postsLayout
+  content = readSnippet(
+    path.join((process.cwd(), 'source_pages', 'layouts', templateEngine, 'posts_home.' + templateEngine))
+  )
+  await writePage('layouts', content, rootPath, 'postLayout.' + templateEngine)
 }
