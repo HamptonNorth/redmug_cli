@@ -80,7 +80,10 @@ async function main() {
       siteTitle: () =>
         text({
           message: 'Site title?',
-          placeholder: 'Redmug'
+          placeholder: 'Redmug',
+          validate: value => {
+            if (!value) return 'Please enter a title'
+          }
         }),
 
       install: () =>
@@ -116,7 +119,7 @@ async function main() {
       CSS: () =>
         select({
           message: 'Select a CSS library for your project.',
-          initialValue: 'redmug',
+          initialValue: '',
           options: [
             { value: 'none', label: 'no CSS to be installed' },
             { value: 'tw', label: 'Tailwind' },
@@ -136,6 +139,7 @@ async function main() {
       }
     }
   )
+
   let installRecipeOption = []
   let getStylesheet = await minifiedCSS(installRecipe.CSS)
   if (installRecipe.CSS === 'tw') {
@@ -168,6 +172,7 @@ async function main() {
   }
 
   const forInstallation = installRecipe
+
   const absolutePath = path.resolve(process.cwd(), project.dir)
 
   // Do installation
