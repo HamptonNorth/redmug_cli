@@ -1,3 +1,9 @@
+---
+title: Fourth Post
+layout: postLayout
+tags: post
+---
+
 # CSS if() function
 ### Summary
 The CSS if() function, specified in CSS Values and Units Module Level 5, provides a concise way to express conditional values. It accepts a series of condition-value pairs, delimited by semicolons. The function evaluates each condition sequentially and returns the value associated with the first true condition. If none of the conditions evaluate to true, the function returns an empty token stream. This allows web authors to express complex conditional logic in a simple and concise way.
