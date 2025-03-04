@@ -12,6 +12,7 @@ export async function buildHomePage(rootPath) {
 
   await writePage('home', content, rootPath, 'index', 'md')
   await copyLogo(rootPath)
+  await copyFavicon(rootPath)
 }
 
 async function copyLogo(rootPath) {
@@ -25,6 +26,20 @@ async function copyLogo(rootPath) {
     fs.copyFileSync(sourcePath, destinationPath)
   } catch (error) {
     console.error('Error copying logo.png to ', destinationPath, ' from: ', sourcePath)
+  }
+}
+
+async function copyFavicon(rootPath) {
+  // copy sample logo
+  const sourcePath = path.join(process.cwd(), 'assets', 'favicon.ico')
+  const destinationPath = path.join(rootPath, 'src', 'assets', 'images', 'favicon.ico')
+  try {
+    if (!fs.existsSync(sourcePath)) {
+      throw new Error(`favicon not found: ${sourcePath}`)
+    }
+    fs.copyFileSync(sourcePath, destinationPath)
+  } catch (error) {
+    console.error('Error copying favicon to ', destinationPath, ' from: ', sourcePath)
   }
 }
 
