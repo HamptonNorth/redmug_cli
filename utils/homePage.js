@@ -10,7 +10,7 @@ export async function buildHomePage(rootPath) {
   const sourceSnippet = path.join(process.cwd(), 'source_pages', 'home', 'home.md')
   let content = await readSnippet(sourceSnippet)
 
-  await writePage('home', content, rootPath, 'home', 'md')
+  await writePage('home', content, rootPath, 'index', 'md')
   await copyLogo(rootPath)
 }
 
