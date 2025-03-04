@@ -10,25 +10,28 @@
 import fs from 'fs'
 import path from 'path'
 
-import { readSnippet } from './readSnippet'
-import { writePage } from './writeSamplePage'
+import { readSnippet } from './readSnippet.js'
+import { writePage } from './writeSamplePage.js'
 
 export async function buildPartialsPages(rootPath, templateEngine) {
   // navigation
-  let content = readSnippet(
-    path.join((process.cwd(), 'source_pages', 'partials', templateEngine, 'navigation.' + templateEngine))
-  )
-  await writePage('partials', content, rootPath, '_navigation.' + templateEngine)
+  let fileName = path.join(process.cwd(), 'source_pages', 'partials', templateEngine, 'navigation.' + templateEngine)
+  let content = await readSnippet(fileName)
+
+  let writePath = path.join('_includes', 'partials', '_navigation')
+  await writePage('partials', content, rootPath, writePath, templateEngine)
 
   //   footer.
-  content = readSnippet(
-    path.join((process.cwd(), 'source_pages', 'partials', templateEngine, 'footer.' + templateEngine))
-  )
-  await writePage('partials', content, rootPath, '_footer.' + templateEngine)
+  fileName = path.join(process.cwd(), 'source_pages', 'partials', templateEngine, 'footer.' + templateEngine)
+  content = await readSnippet(fileName)
+
+  writePath = path.join('_includes', 'partials', '_footer')
+  await writePage('partials', content, rootPath, writePath, templateEngine)
 
   //   pagination
-  content = readSnippet(
-    path.join((process.cwd(), 'source_pages', 'partials', templateEngine, 'pagination.' + templateEngine))
-  )
-  await writePage('partials', content, rootPath, '_pagination.' + templateEngine)
+  fileName = path.join(process.cwd(), 'source_pages', 'partials', templateEngine, 'pagination.' + templateEngine)
+  content = await readSnippet(fileName)
+
+  writePath = path.join('_includes', 'partials', '_pagination')
+  await writePage('partials', content, rootPath, writePath, templateEngine)
 }

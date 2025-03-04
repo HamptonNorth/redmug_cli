@@ -3,8 +3,8 @@
 
 import fs from 'fs'
 import path from 'path'
-import { readSnippet } from './readSnippet'
-import { writePage } from './writeSamplePage'
+import { readSnippet } from './readSnippet.js'
+import { writePage } from './writeSamplePage.js'
 
 export async function buildHomePage(rootPath) {
   const sourceSnippet = path.join(process.cwd(), 'source_pages', 'home', 'home.md')
@@ -62,16 +62,16 @@ async function copyLogo(rootPath) {
 //   }
 // }
 
-async function copyLogo(rootPath) {
-  // copy sample logo
-  const sourcePath = path.join(process.cwd(), 'assets', 'logo.png')
-  const destinationPath = path.join(rootPath, 'src', 'assets', 'images', 'logo.png')
-  try {
-    if (!fs.existsSync(sourcePath)) {
-      throw new Error(`logo.png not found: ${sourcePath}`)
-    }
-    fs.copyFileSync(sourcePath, destinationPath)
-  } catch (error) {
-    console.error('Error copying logo.png to ', destinationPath, ' from: ', sourcePath)
-  }
-}
+// async function copyLogo(rootPath) {
+//   // copy sample logo
+//   const sourcePath = path.join(process.cwd(), 'assets', 'logo.png')
+//   const destinationPath = path.join(rootPath, 'src', 'assets', 'images', 'logo.png')
+//   try {
+//     if (!fs.existsSync(sourcePath)) {
+//       throw new Error(`logo.png not found: ${sourcePath}`)
+//     }
+//     fs.copyFileSync(sourcePath, destinationPath)
+//   } catch (error) {
+//     console.error('Error copying logo.png to ', destinationPath, ' from: ', sourcePath)
+//   }
+// }

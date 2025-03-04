@@ -46,7 +46,7 @@ async function copyCSS(rootPath, css_dir) {
       }
     })
 
-    console.log(`Successfully copied CSS files from ${sourceDirectory} to ${destinationDirectory}`)
+    // console.log(`Successfully copied CSS files from ${sourceDirectory} to ${destinationDirectory}`)
   } catch (error) {
     console.error(`Error copying CSS files: ${error.message}`)
   }

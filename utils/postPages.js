@@ -77,7 +77,7 @@ async function copySamplePosts(rootPath) {
       }
     })
 
-    console.log(`Successfully copied sample post files from ${sourceDirectory} to ${destinationDirectory}`)
+    // console.log(`Successfully copied sample post files from ${sourceDirectory} to ${destinationDirectory}`)
   } catch (error) {
     console.error(`Error copying posts files: ${error.message}`)
   }

@@ -4,7 +4,10 @@
 // write resulting file
 //
 
-async function writePage(type, content, rootPath, name, extension) {
+import fs from 'fs'
+import path from 'path'
+
+export async function writePage(type, content, rootPath, name, extension) {
   let fullPath = ''
 
   let file = name + '.' + extension
@@ -12,8 +15,10 @@ async function writePage(type, content, rootPath, name, extension) {
   // console.log('🚀 ~ index4.js:280 ~ writePage ~ fullPath:', fullPath)
   try {
     fs.writeFileSync(fullPath, content, { encoding: 'utf8' }) // Specify UTF-8 encoding
-    //   console.log('File written successfully!')
+    if (type === 'layouts' || type === 'partials') {
+      console.log('File written type = ', type, ' fullPath = ', fullPath)
+    }
   } catch (err) {
-    console.error('Error writing file of type: ' + type + ' file name: ' + fullPath + ' \n', err)
+    console.error('Error writing file of type = ' + type + ' and file name= ' + fullPath + ' \n', err)
   }
 }

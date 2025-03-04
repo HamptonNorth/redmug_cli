@@ -6,23 +6,30 @@
 //
 
 import path from 'path'
-import { readSnippet } from './readSnippet'
-import { writePage } from './writeSamplePage'
+import { readSnippet } from './readSnippet.js'
+import { writePage } from './writeSamplePage.js'
 
 export async function buildLayoutPages(rootPath, templateEngine, title = 'My site') {
   // base
-  let content = readSnippet(
-    path.join((process.cwd(), 'source_pages', 'layouts', templateEngine, 'base_part_1.' + templateEngine))
+  let sourceFileName = path.join(
+    process.cwd(),
+    'source_pages',
+    'layouts',
+    templateEngine,
+    'base_part_1.' + templateEngine
   )
+  let content = await readSnippet(sourceFileName)
   content += title
-  content += readSnippet(
-    path.join((process.cwd(), 'source_pages', 'layouts', templateEngine, 'base_part_1.' + templateEngine))
-  )
-  await writePage('layouts', content, rootPath, 'base.' + templateEngine)
+  sourceFileName = path.join(process.cwd(), 'source_pages', 'layouts', templateEngine, 'base_part_2.' + templateEngine)
+  content += await readSnippet(sourceFileName)
+
+  let writePath = path.join('_layouts', 'base')
+  await writePage('layouts', content, rootPath, writePath, templateEngine)
 
   // postsLayout
-  content = readSnippet(
-    path.join((process.cwd(), 'source_pages', 'layouts', templateEngine, 'posts_home.' + templateEngine))
-  )
-  await writePage('layouts', content, rootPath, 'postLayout.' + templateEngine)
+  sourceFileName = path.join(process.cwd(), 'source_pages', 'layouts', templateEngine, 'posts_home.' + templateEngine)
+  content = await readSnippet(sourceFileName)
+
+  writePath = path.join('_layouts', 'postLayout')
+  await writePage('layouts', content, rootPath, writePath, templateEngine)
 }
